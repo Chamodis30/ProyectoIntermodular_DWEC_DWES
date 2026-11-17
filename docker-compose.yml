@@ -1,0 +1,20 @@
+# PHP + MySQL + phpMyAdmin. Arranque: docker compose up -d --build
+# Datos de ejemplo:  docker compose exec web php database/instalar.php
+services:
+  web:
+    build: ./docker
+    ports: ["8080:80"]
+    volumes: [".:/var/www/html"]
+    environment: { DB_HOST: db, DB_NAME: aulafix, DB_USER: aulafix, DB_PASS: aulafix }
+    depends_on: [db]
+  db:
+    image: mysql:8
+    environment: { MYSQL_DATABASE: aulafix, MYSQL_USER: aulafix, MYSQL_PASSWORD: aulafix, MYSQL_ROOT_PASSWORD: root }
+    volumes: ["dbdata:/var/lib/mysql"]
+  phpmyadmin:
+    image: phpmyadmin
+    ports: ["8081:80"]
+    environment: { PMA_HOST: db }
+    depends_on: [db]
+volumes:
+  dbdata:
